@@ -51,7 +51,7 @@
 import Vue from 'vue'
 
 import ReservationLayout from './ReservationLayout.component.vue';
-import ReservationsNewDialog from './ReservationsNew.dialog';
+import ReservationsNewDialog from './ReservationsNew.dialog.vue';
 import { formatTime, getReservations, saveReservation, getSettings } from './Reservation.service';
 
 export default Vue.extend({
