@@ -38,32 +38,10 @@
       <v-dialog
         v-model="dialog"
       >
-        <v-card class="pa-4">
-          <v-card-title class="headline">New Reservation</v-card-title>
-          <v-text-field
-            type="text"
-            placeholder="Name"
-            v-model="currentReservation.name"
-          ></v-text-field>
-          <v-text-field
-            type="email"
-            placeholder="Email"
-            v-model="currentReservation.email"
-          ></v-text-field>
-          <v-select
-            placeholder="Party Size"
-            v-model="currentReservation.partySize"
-            :items="partySizes"
-          ></v-select>
-          <v-card-actions>
-            <v-btn
-              color="success"
-              @click.stop="saveReservation"
-            >
-              Save Reservation
-            </v-btn>
-          </v-card-actions>
-        </v-card>
+        <ReservationsNewDialog
+          :error="error"
+          @save="saveReservation"
+        />
       </v-dialog>
     </template>
   </ReservationLayout>
@@ -73,11 +51,13 @@
 import Vue from 'vue'
 
 import ReservationLayout from './ReservationLayout.component.vue';
+import ReservationsNewDialog from './ReservationsNew.dialog';
 import { formatTime, getReservations, saveReservation, getSettings } from './Reservation.service';
 
 export default Vue.extend({
   components: {
     ReservationLayout,
+    ReservationsNewDialog,
   },
   data() {
     return {
@@ -91,11 +71,8 @@ export default Vue.extend({
       currentReservation: {
         time: null,
         slotId: null,
-        partySize: 0,
-        name: '',
-        email: '',
       },
-      partySizes: [...Array(16).keys()].map(item => item + 1)
+      error: '',
     }
   },
   async created() {
@@ -165,13 +142,21 @@ export default Vue.extend({
       });
       return disabled;
     },
-    async saveReservation() {
-      const res = await saveReservation({
-        date: this.currentDate.replace(/-/g,'/'),
-        ...this.currentReservation,
-      });
-      this.dialog = false;
-      this.reservations.push(res);
+
+    async saveReservation({name, email, partySize}) {
+      try {
+        const res = await saveReservation({
+          date: this.currentDate.replace(/-/g,'/'),
+          ...this.currentReservation,
+          name,
+          email,
+          partySize,
+        });
+        this.dialog = false;
+        this.reservations.push(res);
+      } catch(error) {
+        this.error = error.response.data;
+      }
     }
   }
 });
