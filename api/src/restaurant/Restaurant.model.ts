@@ -4,8 +4,13 @@ import {
   DeletedAt,
   Model,
   PrimaryKey, Table,
-  UpdatedAt
+  UpdatedAt,
+  HasMany
 } from 'sequelize-typescript'
+
+import { ReservationSetting } from '../reservations/ReservationSetting.model'
+import { ReservationSlot } from '../reservations/ReservationSlot.model'
+import { Reservation } from '../reservations/Reservation.model'
 
 @Table({ tableName: 'restaurants' })
 export class Restaurant extends Model<Restaurant> {
@@ -18,6 +23,15 @@ export class Restaurant extends Model<Restaurant> {
 
   @Column
   address: string
+
+  @HasMany(() => ReservationSetting)
+  reservation_settings
+
+  @HasMany(() => ReservationSlot)
+  reservation_slots
+
+  @HasMany(() => Reservation)
+  reservations
 
   @DeletedAt
   deleted_at: string

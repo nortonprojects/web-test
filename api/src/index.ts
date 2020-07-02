@@ -1,7 +1,13 @@
 require('source-map-support/register')
 import { Sequelize } from 'sequelize-typescript'
 import { RouterServer } from './RouterServer'
-import * as models from './models'
+import { models as restaurant } from './restaurant';
+import { models as reservations } from './reservations';
+
+const models = {
+  ...restaurant,
+  ...reservations,
+};
 
 ;(async () => {
   new RouterServer().start(8080)

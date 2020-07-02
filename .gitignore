@@ -34,6 +34,7 @@ packages/**/dist
 
 #vscode files
 .code-workspace
+.vscode
 
 deploy/build_paths.txt
 

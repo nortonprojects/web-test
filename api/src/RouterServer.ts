@@ -2,8 +2,11 @@ import * as bodyParser from 'body-parser'
 import morgan from 'morgan'
 import { Server } from '@overnightjs/core'
 import cors from 'cors'
-import * as controllers from './controllers/index'
 import Logger from './logger'
+import { controllers as restaurant } from './restaurant/index';
+import { controllers as reservations } from './reservations/index';
+
+const controllers = {...reservations, ...restaurant};
 
 export class RouterServer extends Server {
   constructor() {
